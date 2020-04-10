@@ -1,5 +1,5 @@
 # hello-world
-Just another repository
+
 #include <sstream>
 #include <vector>
 #include <iostream>
@@ -7,13 +7,10 @@ using namespace std;
 
 vector<int> parseInts(string str)
 {
-
 stringstream ss(str);
 vector<int> out;
-
 char ch;
 int temp;
-
 while(ss >> temp)
 {
 out.push_back(temp);

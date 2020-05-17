@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node *next;
+};
+
+Node *front,*rear;
+
+void Enqueue(int x){
+    Node *temp = new Node();
+    temp->data = x;
+    temp->next = NULL;
+    
+    if (front == NULL && rear == NULL){
+        rear = front = temp;
+        return;
+    }
+    rear->next = temp;
+    rear = temp;
+}
+
+void Dequeue(){
+    Node *temp = front;
+    if (front == NULL) return;
+    else if (front == rear){
+        front = rear = NULL;
+    }
+    else{
+        front = front->next;
+    }
+    delete temp;
+}
+
+void Front(){
+    cout << front->data <<endl;
+}
+
+void Print(){
+    Node *temp = front;
+    while(temp != NULL){
+        cout << temp->data<< " ";
+        temp = temp->next;
+    }
+}
+
+int main() {
+	front = rear = NULL;
+	
+	Enqueue(1);
+	Enqueue(2);
+	Enqueue(3);
+	Enqueue(4);
+	Front();
+	Dequeue();
+	Print();
+	
+	return 0;
+}

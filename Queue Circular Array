@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+int front = -1;
+int rear = -1;
+int A[10];
+int IsEmpty(){
+    if (front == -1 && rear ==-1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void Enqueue(int x){
+    int a = IsEmpty();
+    if ((rear+1)%10 == front){
+        return;
+    }
+    
+    else if (a==1){
+        front =0;
+        rear = 0;
+    }
+    else{
+        rear = (rear +1)%10;
+    }
+    A[rear] = x;
+}
+
+void Dequeue(){
+    int a = IsEmpty();
+    if (a == 1){
+        return;
+    }
+    else if(front == rear){
+        front = rear =-1;
+    }
+    else{
+        front = (front+1)%10;
+    }
+}
+
+int  Front(){
+    return A[front];
+}
+
+void Print(){
+    for (int i=front;i<=rear;i++){
+        cout << A[i] << " ";
+    }
+}
+
+int main() {
+	Enqueue(1);
+	Enqueue(2);
+	Enqueue(3);
+	Enqueue(4);
+	Enqueue(5);
+	Enqueue(6);
+	Enqueue(7);
+	Enqueue(8);
+	Enqueue(9);
+	
+	
+	Dequeue();
+	Dequeue();
+	
+	cout << Front()<<endl;
+	Print();
+	
+	
+	return 0;
+}

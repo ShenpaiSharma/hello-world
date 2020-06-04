@@ -173,6 +173,44 @@ int FindHeight(BstNode *root){
     return (max(leftH, rightH)+1);
 }
 
+void topView(Node *root) {
+    if (root == NULL){
+        return;
+    }
+unordered_map<int,int> m;
+queue<pair<Node*, int>> q;
+q.push(make_pair(root,0));
+        
+
+while(!q.empty()){
+    pair<Node*,int> p = q.front();
+
+    Node *temp = p.first;
+    int val = p.second;
+    q.pop();
+    if (m.count(val) == 0){
+        m[val] = temp->data;
+                
+    }
+    if(temp->left !=NULL){
+        q.push(make_pair(temp->left,val-1));
+    }
+    if (temp->right != NULL){
+        q.push(make_pair(temp->right,val+1));
+    }
+}
+vector<pair<int,int>> v;
+for(auto x:m){
+        v.push_back(x);
+        
+    }
+    sort(v.begin(),v.end());
+    for(auto it=v.begin();it!=v.end();++it){
+        cout<<(*it).second<<" ";
+    }
+        
+}
+
 int main() {
 	BstNode *root = NULL;
 	

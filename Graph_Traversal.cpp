@@ -72,6 +72,34 @@ void DFS(Graph* G,int s){
     }
 }
 
+stack<int> S;
+void TopoRec(Graph* G,int x,bool visit[]){
+    visit[x] = true;
+    for(auto it = G->adj[x].begin(); it != G->adj[x].end(); ++it){
+        if(!visit[*it]){
+            TopoRec(G,*it,visit);
+        }
+    }
+    S.push(x);
+}
+
+void TopoSort(Graph* G,int s){
+    bool* visit = new bool[G->V];
+    for(int i=0;i<G->V;i++){
+        visit[i] = false;
+    }
+    TopoRec(G,s,visit);
+    for(int i=0;i<G->V;i++){
+        if(!visit[i]){
+            TopoRec(G,i,visit);
+        }
+    }
+    while(!S.empty()){
+        cout<<S.top()<<" ";
+        S.pop();
+    }
+}
+
 int main() {
 	Graph* G;
 	G = Adjlist(6);
@@ -86,5 +114,7 @@ int main() {
 	BFS(G,5);
 	cout<<endl;
 	DFS(G,5);
+	cout<<endl;
+	TopoSort(G,5);
 	return 0;
 }

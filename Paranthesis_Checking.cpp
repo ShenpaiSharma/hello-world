@@ -18,7 +18,7 @@ int index(char x){
     
 }
 
-int checkParan(char k[], int n){
+bool checkParan(string k, int n){
     stack<char> s;
     int j;
     for (int i=0; i<n; i++){
@@ -29,7 +29,7 @@ int checkParan(char k[], int n){
         else if(k[i] == c[0] || k[i] == c[1] || k[i] == c[2]){
             j = index(k[i]);
             if (s.empty() || s.top() != o[j]){
-                return 0;
+                return false;
             }
             else{
                 s.pop();
@@ -37,19 +37,23 @@ int checkParan(char k[], int n){
         }
     }
     if (s.empty()){
-        return 1;
+        return true;
     }
 }
 
 int main() {
-    char a[] = "({})[]";
-	int y = checkParan(a,strlen(a));
-	if (y == 1){
-	    cout << "Right Paranthesis";
-	}
-	else{
-	    cout << "Wrong Paranthensis";
-	}
-	
-	return 0;
+    
+    int q;
+    cin>>q;
+    vector<string> p;
+    string r;
+    for(int i=0;i<q;i++){
+        cin>>r;
+        p.push_back(r);
+    }
+    for(int i=0;i<q;i++){
+        if(checkParan(p[i],p[i].size())) cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
+    }
+    return 0;
 }

@@ -1,20 +1,37 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-int Solve(int n){
-    int dp[2*n+1];
-    dp[0] = 0;
-    dp[1] = 1;
-    for(int i=-5;i<0;i++){
-        dp[i] = 0;
+int dp[100][100];
+int vis[100][100];
+
+int CoinChange(int n,int* coin,int k){
+    if(n == 0){
+        return 1;
     }
-    for(int i=2;i<=n;i++){
-        dp[i] = dp[i-1] + dp[i-2]; 
+    if(n < 0){
+        return 0;
     }
-    return dp[n];
+    if(k == 0){
+        return 0;
+    }
+    if(vis[n][k] == 1){
+        return dp[n][k];
+    }
+    int c = CoinChange(n-coin[0],coin,k);
+    int d = CoinChange(n,coin+1,k-1);
+    dp[n][k] = c+d;
+    vis[n][k] = 1;
+    return dp[n][k];
 }
 
 int main() {
-	cout<<Solve(4);
+    int n,k;
+    cin>>n>>k;
+    int coin[k];
+    for(int i=0;i<k;i++){
+        cin>>coin[i];
+    }
+    
+    cout<<CoinChange(n,coin,k);
 	return 0;
 }

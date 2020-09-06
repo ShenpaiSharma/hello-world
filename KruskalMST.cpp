@@ -1,105 +1,114 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 class Edge{
-    public:
-    int src,dest,wt;
+public:
+	int src,dest,wt;
 };
 
 class Graph{
-    public:
-    int V,E;
-    Edge* edge;
+public:
+	int V;
+	int E;
+	Edge* edge;
 };
+
+Graph* createGraph(int x,int y){
+	Graph* G = new Graph();
+	G->V = x;
+	G->E = y;
+	G->edge = new Edge[G->E];
+	return G;
+}
 
 class Subset{
-    public:
-    int parent;
-    int rank;
+public:
+	int parent,rank;
 };
 
-Graph* AdjList(int V,int E){
-    Graph* G = new Graph();
-    G->E = E;
-    G->V = V;
-    G->edge = new Edge[G->E];
-    return G;
+int find(Subset subset[],int i){
+	if(subset[i].parent != i){
+		return find(subset,subset[i].parent);
+	}
+	return subset[i].parent;
 }
 
-int find(Subset subsets[],int i){
-    if(subsets[i].parent != i){
-        subsets[i].parent = find(subsets,subsets[i].parent);
-    }
-    return subsets[i].parent;
+void Union(Subset subset[],int x,int y){
+	int xroot = find(subset,x);
+	int yroot = find(subset,y);
+	if(subset[xroot].rank > subset[yroot].rank){
+		subset[yroot].parent = xroot;
+	}
+	else if(subset[xroot].rank < subset[yroot].rank){
+		subset[xroot].parent = yroot;
+	}
+	else{
+		subset[yroot].parent = xroot;
+		subset[xroot].rank++;
+	}
 }
 
-void Union(Subset subsets[],int x,int y){
-    int xroot = find(subsets,x);
-    int yroot = find(subsets,y);
-    if(subsets[xroot].rank < subsets[yroot].rank){
-        subsets[xroot].parent = yroot;
-    }
-    else if(subsets[xroot].rank > subsets[yroot].rank){
-        subsets[yroot].parent = xroot;
-    }
-    else{
-        subsets[yroot].parent = xroot;
-        subsets[xroot].rank++;
-    }
-}
+int myComp(const void* a, const void* b){  
+    Edge* a1 = (Edge*)a;  
+    Edge* b1 = (Edge*)b;  
+    return a1->wt > b1->wt;  
+}  
 
 void KruskalMST(Graph* G){
-    Subset* subsets = new Subset[G->V*sizeof(Subset)];
-    for(int i=0;i<G->E;i++){
-        subsets[i].parent = i;
-        subsets[i].rank = 0;
-    }
-    Edge result[G->V];
-    int count = 0;
-    int e=0;
-    while(e < (G->V)-1 && count < G->E){
-        Edge next = G->edge[count++];
-        int x = find(subsets,next.src);
-        int y = find(subsets,next.dest);
-        if(x != y){
-            result[e++] = next;
-            Union(subsets,x,y);
-        }
-    }
-    for(count=0;count<e;++count){
-        cout<<result[count].src<<"-->"<<result[count].dest<<" "<<result[count].wt<<endl;
-    }
+	Subset* subset = new Subset[G->V*sizeof(int)];
+	for(int i=0;i<G->V;i++){
+		subset[i].parent = i;
+		subset[i].rank = 0;
+	}
+	Edge result[G->V];
+	qsort(G->edge, G->E, sizeof(G->edge[0]), myComp);  
+	int c = 0;
+	int e =0;
+	while(e < (G->V-1) && c < G->E){
+		Edge next_edge = G->edge[c++];
+		int x = find(subset,next_edge.src);
+		int y = find(subset,next_edge.dest);
+		if(x != y){
+			result[e++] = next_edge;
+			Union(subset,x,y);
+		}
+	}
+	for(int i=0;i<e;i++){
+		cout<<result[i].src<<"-->"<<result[i].dest<<"with wt = "<<result[i].wt<<endl;
+	}
 }
 
-int main() {
-	Graph* graph;
-	graph = AdjList(4,5);
-	
-	graph->edge[0].src = 0;  
-    graph->edge[0].dest = 1;  
-    graph->edge[0].wt = 10;  
+int main(){
+	int V = 4;   
+    int E = 5; / 
+    Graph* G = createGraph(V, E);  
+  
+  
+    // add edge 0-1  
+    G->edge[0].src = 0;  
+    G->edge[0].dest = 1;  
+    G->edge[0].wt = 10;  
   
     // add edge 0-2  
-    graph->edge[1].src = 0;  
-    graph->edge[1].dest = 2;  
-    graph->edge[1].wt = 6;  
+    G->edge[1].src = 0;  
+    G->edge[1].dest = 2;  
+    G->edge[1].wt = 6;  
   
     // add edge 0-3  
-    graph->edge[2].src = 0;  
-    graph->edge[2].dest = 3;  
-    graph->edge[2].wt = 5;  
+    G->edge[2].src = 0;  
+    G->edge[2].dest = 3;  
+    G->edge[2].wt = 5;  
   
     // add edge 1-3  
-    graph->edge[3].src = 1;  
-    graph->edge[3].dest = 3;  
-    graph->edge[3].wt = 15;  
+    G->edge[3].src = 1;  
+    G->edge[3].dest = 3;  
+    G->edge[3].wt = 15;  
   
     // add edge 2-3  
-    graph->edge[4].src = 2;  
-    graph->edge[4].dest = 3;  
-    graph->edge[4].wt = 4;  
+    G->edge[4].src = 2;  
+    G->edge[4].dest = 3;  
+    G->edge[4].wt = 4;  
   
-    KruskalMST(graph);  
-	
+    KruskalMST(G);  
 	return 0;
 }

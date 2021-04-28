@@ -80,7 +80,7 @@ void KruskalMST(Graph* G){
 
 int main(){
 	int V = 4;   
-    int E = 5; / 
+    int E = 5;
     Graph* G = createGraph(V, E);  
   
   
